@@ -11,6 +11,16 @@ jobs:
     steps:
       - name: Garbage
         run: echo test > test.txt
+        
+      - name: Get Time
+        id: time
+        uses: nanzm/get-time-action@v1.1
+        with:
+          timeZone: 0
+          format: 'YYYY-MM-DD-HH-mm-ss'
+      - name: Get SHA
+        id: sha
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
     
       - name: Upload Artifact
         uses: WebFreak001/deploy-nightly@v1.1.0
@@ -20,6 +30,6 @@ jobs:
           upload_url: "https://uploads.github.com/repos/ihm-tswow/ubuntu-ci-tests/releases/61704834/assets{?name,label}"
           release_id: "61704834"
           asset_path: "test.txt"
-          asset_name: "Test"
+          asset_name: "{{steps.time.outputs.time}}-{{steps.sha.outputs.sha_short}}"
           asset_content_type: "text/plain"
           max_releases: 10
