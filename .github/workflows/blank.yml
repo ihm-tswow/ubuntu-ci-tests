@@ -9,8 +9,17 @@ jobs:
   build:
     runs-on: windows-2019
     steps:
-      - name: Dir x86
-        run: dir "c:\Program Files (x86)\"
-
-      - name: Dir x64
-        run: dir c:\Program Files\
+      - name: Garbage
+        run: echo test > test.txt
+    
+      - name: Upload Artifact
+        uses: WebFreak001/deploy-nightly@v1.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: "https://uploads.github.com/repos/ihm-tswow/ubuntu-ci-tests/releases/61704834/assets{?name,label}"
+          release_id: "61704834"
+          asset_path: "test.txt"
+          asset_name: "Test"
+          asset_content_type: "text/plain"
+          max_releases: 10
